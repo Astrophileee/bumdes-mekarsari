@@ -16,28 +16,32 @@
         <i class="fas fa-home w-5 h-5 pt-1 text-gray-600"></i>
         Dashboard
     </a>
+    <a href="{{ route('customers.index') }}" class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
+        <i class="fas fa-users w-5 h-5 pt-1 text-gray-600"></i>
+        Customer
+    </a>
     <a href="{{ route('products.index') }}" class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-        <i class="fas fa-home w-5 h-5 pt-1 text-gray-600"></i>
+        <i class="fas fa-box-open w-5 h-5 pt-1 text-gray-600"></i>
         Product
     </a>
     <a href="{{ route('harvests.index') }}" class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-        <i class="fas fa-home w-5 h-5 pt-1 text-gray-600"></i>
+        <i class="fas fa-seedling w-5 h-5 pt-1 text-gray-600"></i>
         Hasil Panen Beras
     </a>
     <a href="{{ route('warehouses.index') }}" class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-        <i class="fas fa-home w-5 h-5 pt-1 text-gray-600"></i>
+        <i class="fas fa-warehouse w-5 h-5 pt-1 text-gray-600"></i>
         Gudang Beras
     </a>
     <a href="{{ route('stocks.index') }}" class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-        <i class="fas fa-home w-5 h-5 pt-1 text-gray-600"></i>
+        <i class="fas fa-history w-5 h-5 pt-1 text-gray-600"></i>
         Riwayat Stok Beras
     </a>
     <a href="{{ route('transactions.index') }}" class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-        <i class="fas fa-home w-5 h-5 pt-1 text-gray-600"></i>
+        <i class="fas fa-receipt w-5 h-5 pt-1 text-gray-600"></i>
         Transaksi
     </a>
     <a href="{{ route('approvals.index') }}" class="flex items-center gap-3 px-4 py-2 hover:bg-gray-100">
-        <i class="fas fa-home w-5 h-5 pt-1 text-gray-600"></i>
+        <i class="fas fa-check-circle w-5 h-5 pt-1 text-gray-600"></i>
         Approval Pembayaran
     </a>
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HarvestController;
 use App\Http\Controllers\LogStockController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
@@ -12,11 +13,12 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['role:admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->middleware(['auth', 'verified'])->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -26,6 +28,12 @@ Route::middleware(['role:admin'])->group(function () {
         Route::post('/', [ProductController::class, 'store'])->name('store');
         Route::patch('/{product}', [ProductController::class, 'update'])->name('update');
         Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('customers')->name('customers.')->group(function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('index');
+        Route::post('/', [CustomerController::class, 'store'])->name('store');
+        Route::patch('/{customer}', [CustomerController::class, 'update'])->name('update');
+        Route::delete('/{customer}', [CustomerController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('harvests')->name('harvests.')->group(function () {
@@ -61,7 +69,6 @@ Route::middleware(['role:customer'])->group(function () {
         Route::get('/', [ProductController::class, 'indexCustomer'])->name('index');
         Route::get('/{product}', [ProductController::class, 'show'])->name('show');
     });
-
 
 
     Route::prefix('transaction')->name('transaction.')->group(function () {

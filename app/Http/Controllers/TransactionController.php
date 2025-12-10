@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LogStock;
 use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -131,7 +133,7 @@ class TransactionController extends Controller
 
             DB::commit();
 
-            return redirect()->route('dashboard')->with('success', 'Product berhasil ditambahkan.');
+            return redirect()->route('transaction.history.index')->with('success', 'Product berhasil ditambahkan.');
         } catch (\Throwable $e) {
             DB::rollBack();
             dd($e);
@@ -163,7 +165,7 @@ class TransactionController extends Controller
     public function update(Request $request, Transaction $transaction)
     {
         $validated = $request->validate([
-            'status' => 'required|in:delivery,completed,cancelled',
+            'status'   => 'required|in:delivery,completed,cancelled',
             'password' => 'required',
         ]);
 
@@ -171,11 +173,35 @@ class TransactionController extends Controller
             return back()->with('error', 'Password salah.')->withInput();
         }
 
-        $transaction->update([
-            'status' => $request->status,
-        ]);
+        DB::transaction(function () use ($transaction, $validated) {
+            $oldStatus = $transaction->status;
+            $transaction->update([
+                'status' => $validated['status'],
+            ]);
+            if ($oldStatus !== 'completed' && $validated['status'] === 'completed') {
 
-        return redirect()->route('transactions.index')->with('success', 'Status berhasil diperbarui.');
+                $warehouse = Warehouse::firstOrFail();
+                $qty = $transaction->qty;
+
+                $initialStock = $warehouse->current_stock;
+                $changeAmount = -$qty;
+                $finalStock   = $initialStock + $changeAmount;
+                $warehouse->update([
+                    'current_stock' => $finalStock,
+                ]);
+                LogStock::create([
+                    'type'          => 'Transaksi',
+                    'initial_stock' => $initialStock,
+                    'change_amount' => $changeAmount,
+                    'final_stock'   => $finalStock,
+                    'notes'         => 'Stok dikurangi dari Transaksi ID: ' . $transaction->id,
+                ]);
+            }
+        });
+
+        return redirect()
+            ->route('transactions.index')
+            ->with('success', 'Status berhasil diperbarui.');
     }
 
     /**

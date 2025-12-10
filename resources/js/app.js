@@ -96,5 +96,15 @@ $(document).ready(function () {
         },
     });
 
+    $('#customersTable').DataTable({
+        responsive: true,
+        pageLength: 10,
+        lengthChange: false,
+        language: {
+            searchPlaceholder: 'Cari...',
+            search: '',
+        },
+    });
+
 });
 
