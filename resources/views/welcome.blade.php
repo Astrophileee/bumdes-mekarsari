@@ -13,7 +13,7 @@
             </p>
 
             <div class="mt-8 flex justify-center gap-4">
-                <a href=""
+                <a href="{{ auth()->check() ? route('productsCustomer.index') : route('login') }}"
                     class="px-6 py-3 bg-yellow-300 text-[#C94544] font-semibold rounded-lg shadow hover:bg-yellow-400 transition">
                     Belanja Sekarang
                 </a>
